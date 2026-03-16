@@ -1,7 +1,11 @@
-from pqcrypto.sign import dilithium2
+from pqcrypto.sign.ml_dsa_44 import sign
 
 
 def sign_message(message, private_key):
-    signature = dilithium2.sign(message.encode(), private_key)
+
+    if isinstance(message, str):
+        message = message.encode()
+
+    signature = sign(private_key, message)
 
     return signature
