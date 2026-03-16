@@ -1,9 +1,13 @@
-from pqcrypto.sign import dilithium2
+from pqcrypto.sign.ml_dsa_44 import verify
 
 
 def verify_signature(message, signature, public_key):
+
+    if isinstance(message, str):
+        message = message.encode()
+
     try:
-        dilithium2.verify(message.encode(), signature, public_key)
+        verify(public_key, message, signature)
         return True
-    except:
+    except Exception:
         return False
