@@ -1,14 +1,25 @@
-from pqc.keygen import generate_dilithium_keys
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from pqc.keygen import generate_pqc_keys
 from pqc.sign import sign_message
 from pqc.verify import verify_signature
 
 
-pk, sk = generate_dilithium_keys()
+def test_pqc_crypto():
 
-message = "Send 10 coins"
+    public_key, private_key = generate_pqc_keys()
 
-signature = sign_message(message, sk)
+    message = "Send 10 coins"
 
-result = verify_signature(message, signature, pk)
+    signature = sign_message(message, private_key)
 
-print("Verification:", result)
+    result = verify_signature(message, signature, public_key)
+
+    print("Verification:", result)
+
+
+if __name__ == "__main__":
+    test_pqc_crypto()
