@@ -10,7 +10,7 @@ def create_transaction(sender, receiver, private_key, amount_eth):
     gas_estimate = w3.eth.estimate_gas({
     "from": sender,
     "to": receiver,
-    "value": w3.to_wei(amount, "ether")
+    "value": w3.to_wei(amount_eth, "ether")
 })
     tx = {
         "nonce": nonce,
@@ -18,7 +18,7 @@ def create_transaction(sender, receiver, private_key, amount_eth):
         "value": w3.to_wei(amount_eth, "ether"),
         "gas": gas_estimate,
         "gasPrice": w3.to_wei("20", "gwei"),
-        "chainId": 11155111  # Sepolia
+        "chainId": 1337  # ganache
     }
    
     signed_tx = w3.eth.account.sign_transaction(tx, private_key)

@@ -1,8 +1,10 @@
 from web3 import Web3
 
-INFURA_URL = "https://sepolia.infura.io/v3/4c18ce04642142589a36df4048c97ff0"
+# 🔹 Ganache Local Blockchain URL
+GANACHE_URL = "http://127.0.0.1:7545"
 
-w3 = Web3(Web3.HTTPProvider(INFURA_URL))
+# 🔹 Create Web3 instance
+w3 = Web3(Web3.HTTPProvider(GANACHE_URL))
 
 
 def get_web3():
@@ -13,8 +15,9 @@ def is_connected():
     return w3.is_connected()
 
 
+# 🔹 Run test
 if __name__ == "__main__":
     if is_connected():
-        print("Connected to Ethereum Sepolia Testnet")
+        print("✅ Connected to Ganache Blockchain")
     else:
-        print("Connection failed")
+        print("❌ Connection failed")
