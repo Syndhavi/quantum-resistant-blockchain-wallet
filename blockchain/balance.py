@@ -1,5 +1,5 @@
 from web3 import Web3
-from connect import get_web3
+from blockchain.connect import get_web3
 
 w3 = get_web3()
 
