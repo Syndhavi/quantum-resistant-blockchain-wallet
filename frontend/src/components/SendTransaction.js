@@ -2,12 +2,19 @@ import React, { useState } from "react";
 
 const API_BASE = "http://127.0.0.1:5000";
 
-const SendTransaction = ({ wallet }) => {
-  const [to, setTo] = useState("");
+const SendTransaction = () => {
+  const [sender, setSender] = useState("");
+  const [receiver, setReceiver] = useState("");
+  const [privateKey, setPrivateKey] = useState("");
   const [amount, setAmount] = useState("");
   const [status, setStatus] = useState("");
 
   const sendTransaction = async () => {
+    if (!sender || !receiver || !privateKey || !amount) {
+      setStatus("⚠️ Fill all fields");
+      return;
+    }
+
     try {
       const res = await fetch(`${API_BASE}/send-transaction`, {
         method: "POST",
@@ -15,14 +22,21 @@ const SendTransaction = ({ wallet }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: wallet?.address,
-          to,
-          amount,
+          sender: sender,
+          receiver: receiver,
+          private_key: privateKey,
+          amount: amount,
         }),
       });
 
       const data = await res.json();
-      setStatus(data.message);
+
+      if (res.status === 200) {
+        setStatus(`✅ TX Hash: ${data.tx_hash}`);
+      } else {
+        setStatus(`❌ ${data.error}`);
+      }
+
     } catch (err) {
       console.error(err);
       setStatus("Transaction failed ❌");
@@ -35,19 +49,33 @@ const SendTransaction = ({ wallet }) => {
 
       <input
         type="text"
-        placeholder="Recipient Address"
-        value={to}
-        onChange={(e) => setTo(e.target.value)}
+        placeholder="Sender Address"
+        value={sender}
+        onChange={(e) => setSender(e.target.value)}
+      />
+
+      <input
+        type="text"
+        placeholder="Receiver Address"
+        value={receiver}
+        onChange={(e) => setReceiver(e.target.value)}
+      />
+
+      <input
+        type="text"
+        placeholder="Sender Private Key"
+        value={privateKey}
+        onChange={(e) => setPrivateKey(e.target.value)}
       />
 
       <input
         type="number"
-        placeholder="Amount"
+        placeholder="Amount (ETH)"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
       />
 
-      <button onClick={sendTransaction} disabled={!wallet}>
+      <button onClick={sendTransaction}>
         Send
       </button>
 
